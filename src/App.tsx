@@ -1,25 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { GlobalStyles } from './styles/GlobalStyles';
+import Navigation from './components/Navigation';
+import Hero from './components/Hero';
+import About from './components/About';
+import Skills from './components/Skills';
+import Experience from './components/Experience';
+import Projects from './components/Projects';
+import Education from './components/Education';
+import Volunteering from './components/Volunteering';
+import HonorsAwards from './components/HonorsAwards';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+// import BackgroundElements from './components/BackgroundElements';
+import './i18n';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <GlobalStyles />
+      {/* <BackgroundElements /> */}
+      <Navigation />
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Education />
+        <Volunteering />
+        <HonorsAwards />
+        <Contact />
+      </main>
+      <Footer />
+    </ThemeProvider>
   );
 }
 

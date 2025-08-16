@@ -10,6 +10,7 @@
 
 # production
 /build
+EMAILJS_SETUP.md
 
 # misc
 .DS_Store
