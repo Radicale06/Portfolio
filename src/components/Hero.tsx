@@ -242,8 +242,8 @@ const Hero: React.FC = () => {
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   
   const roles = useMemo(() => [
-    'AI Engineer & Data Engineer',
-    'Data Scientist',
+    'AI Engineer',
+    'Full-Stack Developer',
   ], []);
 
   useEffect(() => {
