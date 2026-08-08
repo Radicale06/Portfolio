@@ -179,8 +179,8 @@ const Hero: React.FC = () => {
   const { t } = useTranslation();
 
   const stats = [
-    { value: '20+', label: 'Projects' },
-    { value: '3', label: 'SaaS products' },
+    { value: '30+', label: 'Projects' },
+    { value: '1+', label: 'Years Experience' },
     { value: '4', label: 'Awards' }
   ];
 
