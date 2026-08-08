@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring, Variants } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
@@ -9,51 +9,88 @@ const Header = styled.div`
 `;
 
 const Timeline = styled.div`
-  display: flex;
-  flex-direction: column;
+  position: relative;
 `;
 
-const TimelineRow = styled(motion.div)`
-  display: flex;
-  gap: 2.5rem;
+const RailTrack = styled.div`
+  position: absolute;
+  top: 6px;
+  bottom: 0;
+  left: 9.5px;
+  width: 1px;
+  background-color: ${({ theme }) => theme.colors.border};
+  mask-image: linear-gradient(to bottom, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 88%, transparent);
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    gap: 1.25rem;
+  [dir='rtl'] & {
+    left: auto;
+    right: 9.5px;
   }
 `;
 
-const Rail = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1.25rem;
-  flex-shrink: 0;
-  padding-top: 0.25rem;
+const RailProgress = styled(motion.div)`
+  position: absolute;
+  top: 6px;
+  bottom: 0;
+  left: 9px;
+  width: 2px;
+  transform-origin: top;
+  background: linear-gradient(
+    to bottom,
+    ${({ theme }) => theme.colors.accent},
+    ${({ theme }) => theme.colors.primary}
+  );
+  mask-image: linear-gradient(to bottom, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 88%, transparent);
+
+  [dir='rtl'] & {
+    left: auto;
+    right: 9px;
+  }
 `;
 
-const Dot = styled.div`
+const EntryRow = styled(motion.div)`
+  position: relative;
+  padding-left: 3.75rem;
+  padding-bottom: 2.5rem;
+
+  &:last-child {
+    padding-bottom: 0.5rem;
+  }
+
+  [dir='rtl'] & {
+    padding-left: 0;
+    padding-right: 3.75rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding-left: 2.25rem;
+
+    [dir='rtl'] & {
+      padding-left: 0;
+      padding-right: 2.25rem;
+    }
+  }
+`;
+
+const Dot = styled(motion.div)`
+  position: absolute;
+  top: 0.3rem;
+  left: 4px;
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.accent};
   border: 2px solid ${({ theme }) => theme.colors.background};
   box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.accent};
-  flex-shrink: 0;
+
+  [dir='rtl'] & {
+    left: auto;
+    right: 4px;
+  }
 `;
 
-const Line = styled.div`
-  width: 1px;
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.border};
-  margin-top: 0.25rem;
-`;
-
-const Entry = styled.div`
-  flex: 1;
-  padding-bottom: 2.5rem;
-`;
-
-const EntryHeader = styled.div`
+const EntryHeader = styled(motion.div)`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -131,7 +168,7 @@ const Bullets = styled.ul`
   margin-top: 0.75rem;
 `;
 
-const Bullet = styled.li`
+const Bullet = styled(motion.li)`
   display: flex;
   gap: 0.5rem;
   font-size: 0.8125rem;
@@ -150,6 +187,23 @@ const Bullet = styled.li`
   }
 `;
 
+const entryVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.05 }
+  }
+};
+
+const revealVariants: Variants = {
+  hidden: { opacity: 0, y: 20, filter: 'blur(6px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.55, ease: 'easeOut' }
+  }
+};
+
 interface ExperienceItem {
   title: string;
   company: string;
@@ -162,6 +216,17 @@ interface ExperienceItem {
 
 const Experience: React.FC = () => {
   const { t } = useTranslation();
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ['start 0.8', 'end 0.45']
+  });
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 25,
+    restDelta: 0.001
+  });
 
   const experiences: ExperienceItem[] = [
     {
@@ -260,52 +325,60 @@ const Experience: React.FC = () => {
           <SectionTitle {...fadeUp}>{t('experience.title')}</SectionTitle>
         </Header>
 
-        <Timeline>
-          {experiences.map((exp, index) => (
-            <TimelineRow
+        <Timeline ref={timelineRef}>
+          <RailTrack />
+          <RailProgress style={{ scaleY: progress }} />
+
+          {experiences.map(exp => (
+            <EntryRow
               key={`${exp.company}-${exp.duration}`}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.3) }}
+              variants={entryVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px 0px -12% 0px' }}
             >
-              <Rail>
-                <Dot />
-                {index < experiences.length - 1 && <Line />}
-              </Rail>
-              <Entry>
-                <EntryHeader>
-                  <div>
-                    <RoleTitle>{exp.title}</RoleTitle>
-                    <Company
-                      href={exp.companyUrl}
-                      target={exp.companyUrl ? '_blank' : undefined}
-                      rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
-                      as={exp.companyUrl ? 'a' : 'span'}
-                    >
-                      @ {exp.company}
-                    </Company>
-                    {exp.current && (
-                      <CurrentBadge>{t('experience.current')}</CurrentBadge>
-                    )}
-                  </div>
-                  <EntryMeta>
-                    <div>{exp.duration}</div>
-                    <div>{exp.location}</div>
-                  </EntryMeta>
-                </EntryHeader>
-                <Bullets>
-                  {exp.description.map((item, i) => (
-                    <Bullet key={i}>
-                      <span>
-                        {item.lead && <strong>{item.lead}  </strong>}
-                        {item.text}
-                      </span>
-                    </Bullet>
-                  ))}
-                </Bullets>
-              </Entry>
-            </TimelineRow>
+              <Dot
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 260,
+                  damping: 18,
+                  delay: 0.1
+                }}
+              />
+              <EntryHeader variants={revealVariants}>
+                <div>
+                  <RoleTitle>{exp.title}</RoleTitle>
+                  <Company
+                    href={exp.companyUrl}
+                    target={exp.companyUrl ? '_blank' : undefined}
+                    rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
+                    as={exp.companyUrl ? 'a' : 'span'}
+                  >
+                    @ {exp.company}
+                  </Company>
+                  {exp.current && (
+                    <CurrentBadge>{t('experience.current')}</CurrentBadge>
+                  )}
+                </div>
+                <EntryMeta>
+                  <div>{exp.duration}</div>
+                  <div>{exp.location}</div>
+                </EntryMeta>
+              </EntryHeader>
+              <Bullets>
+                {exp.description.map((item, i) => (
+                  <Bullet key={i} variants={revealVariants}>
+                    <span>
+                      {item.lead && <strong>{item.lead}  </strong>}
+                      {item.text}
+                    </span>
+                  </Bullet>
+                ))}
+              </Bullets>
+            </EntryRow>
           ))}
         </Timeline>
       </Container>

@@ -12,6 +12,7 @@ import HonorsAwards from './components/HonorsAwards';
 import Volunteering from './components/Volunteering';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import BackToTop from './components/BackToTop';
 import './i18n';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <BackToTop />
     </ThemeProvider>
   );
 }
