@@ -1,6 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, useScroll, useSpring, Variants } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useMotionValueEvent,
+  MotionValue,
+  Variants
+} from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
@@ -190,17 +197,21 @@ const Bullet = styled(motion.li)`
 const entryVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.05 }
+    transition: { staggerChildren: 0.08 }
   }
 };
 
 const revealVariants: Variants = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(6px)' },
+  hidden: (rtl: boolean) => ({
+    opacity: 0,
+    x: rtl ? 32 : -32,
+    filter: 'blur(6px)'
+  }),
   visible: {
     opacity: 1,
-    y: 0,
+    x: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.55, ease: 'easeOut' }
+    transition: { duration: 0.5, ease: 'easeOut' }
   }
 };
 
@@ -214,8 +225,88 @@ interface ExperienceItem {
   description: { lead?: string; text: string }[];
 }
 
-const Experience: React.FC = () => {
+interface TimelineEntryProps {
+  exp: ExperienceItem;
+  progress: MotionValue<number>;
+  timelineRef: React.RefObject<HTMLDivElement>;
+  rtl: boolean;
+}
+
+const TimelineEntry: React.FC<TimelineEntryProps> = ({
+  exp,
+  progress,
+  timelineRef,
+  rtl
+}) => {
   const { t } = useTranslation();
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  const checkProgress = (value: number) => {
+    if (revealed) return;
+    const timeline = timelineRef.current;
+    const row = rowRef.current;
+    if (!timeline || !row) return;
+    const tip = value * timeline.offsetHeight;
+    if (tip >= row.offsetTop + 12) {
+      setRevealed(true);
+    }
+  };
+
+  useMotionValueEvent(progress, 'change', checkProgress);
+
+  useEffect(() => {
+    checkProgress(progress.get());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <EntryRow
+      ref={rowRef}
+      variants={entryVariants}
+      initial="hidden"
+      animate={revealed ? 'visible' : 'hidden'}
+    >
+      <Dot
+        initial={{ scale: 0 }}
+        animate={revealed ? { scale: 1 } : { scale: 0 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+      />
+      <EntryHeader variants={revealVariants} custom={rtl}>
+        <div>
+          <RoleTitle>{exp.title}</RoleTitle>
+          <Company
+            href={exp.companyUrl}
+            target={exp.companyUrl ? '_blank' : undefined}
+            rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
+            as={exp.companyUrl ? 'a' : 'span'}
+          >
+            @ {exp.company}
+          </Company>
+          {exp.current && <CurrentBadge>{t('experience.current')}</CurrentBadge>}
+        </div>
+        <EntryMeta>
+          <div>{exp.duration}</div>
+          <div>{exp.location}</div>
+        </EntryMeta>
+      </EntryHeader>
+      <Bullets>
+        {exp.description.map((item, i) => (
+          <Bullet key={i} variants={revealVariants} custom={rtl}>
+            <span>
+              {item.lead && <strong>{item.lead}  </strong>}
+              {item.text}
+            </span>
+          </Bullet>
+        ))}
+      </Bullets>
+    </EntryRow>
+  );
+};
+
+const Experience: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const rtl = i18n.language === 'ar';
   const timelineRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -330,55 +421,13 @@ const Experience: React.FC = () => {
           <RailProgress style={{ scaleY: progress }} />
 
           {experiences.map(exp => (
-            <EntryRow
+            <TimelineEntry
               key={`${exp.company}-${exp.duration}`}
-              variants={entryVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '0px 0px -12% 0px' }}
-            >
-              <Dot
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true, margin: '0px 0px -12% 0px' }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 260,
-                  damping: 18,
-                  delay: 0.1
-                }}
-              />
-              <EntryHeader variants={revealVariants}>
-                <div>
-                  <RoleTitle>{exp.title}</RoleTitle>
-                  <Company
-                    href={exp.companyUrl}
-                    target={exp.companyUrl ? '_blank' : undefined}
-                    rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
-                    as={exp.companyUrl ? 'a' : 'span'}
-                  >
-                    @ {exp.company}
-                  </Company>
-                  {exp.current && (
-                    <CurrentBadge>{t('experience.current')}</CurrentBadge>
-                  )}
-                </div>
-                <EntryMeta>
-                  <div>{exp.duration}</div>
-                  <div>{exp.location}</div>
-                </EntryMeta>
-              </EntryHeader>
-              <Bullets>
-                {exp.description.map((item, i) => (
-                  <Bullet key={i} variants={revealVariants}>
-                    <span>
-                      {item.lead && <strong>{item.lead}  </strong>}
-                      {item.text}
-                    </span>
-                  </Bullet>
-                ))}
-              </Bullets>
-            </EntryRow>
+              exp={exp}
+              progress={progress}
+              timelineRef={timelineRef}
+              rtl={rtl}
+            />
           ))}
         </Timeline>
       </Container>
