@@ -16,42 +16,21 @@ export const GlobalStyles = createGlobalStyle`
     font-family: ${({ theme }) => theme.fonts.primary};
     background-color: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.text};
-    line-height: 1.6;
+    font-size: 0.9375rem;
+    line-height: 1.5;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-  }
-
-  h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-  }
-
-  h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-  }
-
-  h3 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-  }
-
-  p {
-    margin-bottom: 1rem;
-    color: ${({ theme }) => theme.colors.textSecondary};
+    line-height: 1.25;
   }
 
   a {
-    color: ${({ theme }) => theme.colors.primary};
+    color: inherit;
     text-decoration: none;
     transition: color 0.3s ease;
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.secondary};
-    }
   }
 
   button {
@@ -67,20 +46,7 @@ export const GlobalStyles = createGlobalStyle`
   img {
     max-width: 100%;
     height: auto;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-
-  .section {
-    padding: 5rem 0;
-    
-    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-      padding: 3rem 0;
-    }
+    display: block;
   }
 
   .sr-only {
@@ -95,6 +61,11 @@ export const GlobalStyles = createGlobalStyle`
     border-width: 0;
   }
 
+  ::selection {
+    background: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondaryForeground};
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -104,87 +75,15 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.accent};
     border-radius: 5px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.secondary};
+    background: ${({ theme }) => theme.colors.primary};
   }
 
   [dir="rtl"] {
     text-align: right;
-  }
-
-  .floating {
-    animation: floating 6s ease-in-out infinite;
-  }
-
-  @keyframes floating {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
-
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .gradient-animate {
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
   }
 `;

@@ -2,340 +2,314 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiCalendar, FiMapPin, FiExternalLink } from 'react-icons/fi';
+import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
-const ExperienceSection = styled.section`
-  padding: 5rem 0;
-  background-color: ${({ theme }) => theme.colors.surface};
-`;
-
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-`;
-
-const Title = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: 3rem;
+const Header = styled.div`
+  margin-bottom: 2.5rem;
 `;
 
 const Timeline = styled.div`
-  position: relative;
-  max-width: 800px;
-  margin: 0 auto;
-  padding-left: 50px;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 30px;
-    width: 2px;
-    height: 100%;
-    background: ${({ theme }) => theme.colors.border};
-  }
+  display: flex;
+  flex-direction: column;
 `;
 
-const TimelineItem = styled(motion.div)<{ align: 'left' | 'right' }>`
-  position: relative;
-  width: 100%;
-  padding: 2rem;
-  margin-bottom: 2rem;
+const TimelineRow = styled(motion.div)`
+  display: flex;
+  gap: 2.5rem;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding-left: 70px;
-    padding-right: 2rem;
+    gap: 1.25rem;
   }
 `;
 
-const TimelineDot = styled.div`
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: ${({ theme }) => theme.colors.primary};
-  border: 4px solid ${({ theme }) => theme.colors.background};
+const Rail = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1.25rem;
+  flex-shrink: 0;
+  padding-top: 0.25rem;
+`;
+
+const Dot = styled.div`
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  top: 2rem;
-  left: -20px;
-  transform: translateX(-50%);
-  ${({ theme }) => `
-    box-shadow: 0 0 0 4px ${theme.colors.primary}20;
-  `}
+  background-color: ${({ theme }) => theme.colors.accent};
+  border: 2px solid ${({ theme }) => theme.colors.background};
+  box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.accent};
+  flex-shrink: 0;
 `;
 
-const Card = styled.div`
-  background: ${({ theme }) => theme.colors.background};
-  padding: 2.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  border-left: 4px solid ${({ theme }) => theme.colors.primary};
+const Line = styled.div`
+  width: 1px;
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.border};
+  margin-top: 0.25rem;
+`;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+const Entry = styled.div`
+  flex: 1;
+  padding-bottom: 2.5rem;
+`;
+
+const EntryHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 0.25rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    gap: 0.25rem;
   }
 `;
 
-const JobTitle = styled.h3`
-  color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-`;
-
-const Company = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-`;
-
-const CompanyName = styled.h4`
-  color: ${({ theme }) => theme.colors.text};
+const RoleTitle = styled.span`
   font-size: 1.125rem;
-`;
-
-const CompanyLink = styled.a`
-  color: ${({ theme }) => theme.colors.primary};
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-`;
-
-const YearPeriodLine = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  font-size: 0.875rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
-`;
-
-const YearBadge = styled.span`
-  background: ${({ theme }) => theme.colors.primary};
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
   font-weight: 600;
-  font-size: 0.75rem;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
-const PeriodText = styled.span`
+const Company = styled.a`
+  font-size: 0.9375rem;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.accent};
+  margin-left: 0.5rem;
+
+  &[href]:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  [dir='rtl'] & {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
 `;
 
-const MetaInfo = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
+const CurrentBadge = styled.span`
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.secondaryForeground};
+  border-radius: 32px;
+  padding: 0.125rem 0.625rem;
+  margin-left: 0.625rem;
+  vertical-align: middle;
+
+  [dir='rtl'] & {
+    margin-left: 0;
+    margin-right: 0.625rem;
+  }
+`;
+
+const EntryMeta = styled.div`
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 0.6875rem;
   color: ${({ theme }) => theme.colors.textSecondary};
+
+  div:first-child {
+    font-weight: 500;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    text-align: left;
+  }
+
+  [dir='rtl'] & {
+    text-align: left;
+  }
 `;
 
-const MetaItem = styled.div`
+const Bullets = styled.ul`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+`;
+
+const Bullet = styled.li`
+  display: flex;
   gap: 0.5rem;
-`;
-
-const Description = styled.ul`
-  list-style: none;
-  margin-top: 1rem;
-`;
-
-const DescriptionItem = styled.li`
-  position: relative;
-  padding-left: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.8;
-  font-size: 1rem;
 
   &::before {
     content: '▸';
-    position: absolute;
-    left: 0;
-    color: ${({ theme }) => theme.colors.primary};
-    font-weight: bold;
+    color: ${({ theme }) => theme.colors.accent};
+    flex-shrink: 0;
+  }
+
+  strong {
+    color: ${({ theme }) => theme.colors.text};
+    font-weight: 500;
   }
 `;
+
+interface ExperienceItem {
+  title: string;
+  company: string;
+  companyUrl?: string;
+  location: string;
+  duration: string;
+  current?: boolean;
+  description: { lead?: string; text: string }[];
+}
 
 const Experience: React.FC = () => {
   const { t } = useTranslation();
 
-  const experiences = [
+  const experiences: ExperienceItem[] = [
     {
-      title: "AI Software Engineer",
-      company: "ACCESS International",
-      companyUrl: "https://www.linkedin.com/company/access-inter/posts/?feedView=all",
-      location: "Tunis, Tunisia",
-      duration: "01/06/2025 – 30/06/2025",
-      year: "2025",
-      current: false,
+      title: 'AI Engineer',
+      company: 'Quicky Prime',
+      location: 'Full-time · Remote',
+      duration: 'Dec 2025  Present',
+      current: true,
       description: [
-        "Built full-stack booking platform with user interface and back-office dashboard for facility management and real-time scheduling",
-        "Developed conversational booking agent using n8n workflow automation for direct WhatsApp reservations",
-        "Configured secure connections using ngrok for SSL termination and WhatsApp webhook integration"
+        {
+          text: 'Lead AI engineer across three SaaS products:'
+        },
+        {
+          lead: 'Sawti.tn',
+          text: 'Self-hosted multimodal AI platform for Tunisian creators  trained and deployed the first Tunisian-dialect TTS and STT models with zero-shot voice cloning, plus Image and Video Studios.'
+        },
+        {
+          lead: 'Audixy.fr',
+          text: 'Multi-tenant conversational AI across 5 channels  LangGraph agents, real-time voice agents on self-hosted LiveKit, and a full RAG pipeline on pgvector.'
+        },
+        {
+          lead: 'Confirmify.site',
+          text: 'COD order-confirmation platform  AI calling agents that phone customers plus WhatsApp agents, integrated with Shopify, TikTok, Snapchat and Instagram.'
+        }
       ]
     },
     {
-      title: "AI Engineer",
-      company: "Favizone",
-      companyUrl: "https://favizone.com",
-      location: "Tunis, Tunisia",
-      duration: "01/05/2025 – 31/05/2025",
-      year: "2025",
+      title: 'AI Engineer',
+      company: 'Access International',
+      companyUrl: 'https://www.linkedin.com/company/access-inter/posts/?feedView=all',
+      location: 'Freelance · Remote',
+      duration: 'Jun 2025  Jul 2025',
       description: [
-        "Deployed and optimized large language models (Mistral-8x7B, Llama-70B) using vLLM framework with GPU memory management",
-        "Conducted performance benchmarking measuring token throughput, latency, and concurrent user capacity (5-20 users)",
-        "Performed systematic comparison testing on NVIDIA configurations (H100, A10, A100, Tesla series on OVHCloud)",
-        "Developed chat templates and tokenizer configurations for non-supported models (JAIS family)",
-        "Built automated performance monitoring systems tracking tokens/second, memory usage, and real-time scaling metrics"
+        { text: 'Engineered a sport reservation platform using React and FastAPI.' },
+        { text: 'Architected an intelligent WhatsApp AI booking assistant using n8n and OpenAI.' }
       ]
     },
     {
-      title: "AI Software Engineer Intern",
-      company: "ACCESS International",
-      companyUrl: "https://www.linkedin.com/company/access-inter/posts/?feedView=all",
-      location: "Tunis, Tunisia",
-      duration: "03/02/2025 – 31/05/2025",
-      year: "2025",
+      title: 'AI Engineer',
+      company: 'Favizone',
+      companyUrl: 'https://favizone.com',
+      location: 'Freelance · Remote',
+      duration: 'Apr 2025  May 2025',
       description: [
-        "Developed end-to-end platform democratizing AI chatbot creation for non-technical users",
-        "Implemented Multi-Tenant RAG Architecture with ChromaDB, metadata filtering, and intelligent deduplication",
-        "Deployed Mistral-Small-24B for English/French interactions and Cohere Command-R7B for Arabic using vLLM",
-        "Built Celery orchestrated ingestion supporting 7 formats, web scrapping via Selenium Grid",
-        "Created React frontend with responsive UI and Django REST backend"
+        { text: 'Led deployment and optimization of LLMs (Mistral-8x7B, Llama-70B) with vLLM  GPU memory management and tensor parallelism for high-throughput inference.' },
+        { text: 'Architected Ray clusters on OVHCloud for distributed inference and horizontal scaling across multi-node architectures.' },
+        { text: 'Benchmarked diverse GPU architectures (H100, A100, A10, Tesla), optimizing throughput, response times and maximum concurrent user capacity.' },
+        { text: 'Integrated JAIS-family models into the inference pipeline with custom chat templates and tokenizer configurations for full vLLM compatibility.' }
       ]
     },
     {
-      title: "AI Engineer Intern",
-      company: "Freedom Of Dev",
-      companyUrl: "https://www.freedomofdev.com/en/homepage/",
-      location: "Sfax, Tunisia",
-      duration: "01/07/2024 – 31/08/2024",
-      year: "2024",
+      title: 'AI Engineer Intern',
+      company: 'Access International',
+      companyUrl: 'https://www.linkedin.com/company/access-inter/posts/?feedView=all',
+      location: 'Tunis, Tunisia',
+      duration: 'Feb 2025  Jul 2025',
       description: [
-        "Developed a tool recommending ML models based on user input",
-        "Integrated ReactJS frontend and Django backend for file uploads and model generation",
-        "Used YOLO and AutoKeras for image classification and user model training",
-        "Provided model evaluation metrics and comparisons in a simple format"
+        { text: 'Architected an AI platform that democratizes chatbot creation, letting non-technical users deploy production-ready conversational agents.' },
+        { text: 'Engineered an isolated RAG architecture on ChromaDB  semantic chunking for documents, row-based chunking for tabular data, intelligent vector deduplication.' },
+        { text: 'Orchestrated LLM deployments on 160GB-VRAM infrastructure, serving Mistral-Small-24B (EN/FR with function calling) and Cohere Command-R7B (Arabic) via vLLM.' },
+        { text: 'Built an asynchronous ingestion pipeline with Celery and Selenium Grid, supporting automated web scraping across 7 data formats and database connectors.' },
+        { text: 'Designed a containerized microservices stack  React frontend, Django REST backend, automated COSTAR prompt engineering and real-time conversation analytics.' }
       ]
     },
     {
-      title: "Mobile Developer Intern",
-      company: "CompiTechnolgy",
-      companyUrl: "https://www.linkedin.com/company/compitechnology/",
-      location: "Sfax, Tunisia",
-      duration: "01/07/2023 – 15/09/2023",
-      year: "2023",
+      title: 'AI Engineer Intern',
+      company: 'Yuma Tunisia',
+      location: 'Sfax, Tunisia',
+      duration: 'Jul 2024  Aug 2024',
       description: [
-        "Developed a mobile app prototype for a Canadian startup using Flutter",
-        "Aligned the prototype with the startup's goals using Figma for UI/UX designs",
-        "Utilized Android Studio for development and debugging",
-        "Integrated Firebase for backend functionality and real-time updates"
+        { text: 'Engineered a full-stack ML Model Generator tool with FastAPI and React  automated model recommendations, dataset uploads and training pipelines.' },
+        { text: 'Integrated LazyPredict with automated hyperparameter optimization to evaluate, fine-tune and recommend the best-fitting ML algorithms per dataset.' },
+        { text: 'Added computer-vision capabilities with YOLO and AutoKeras for training custom image-classification models from the web interface.' },
+        { text: 'Designed a validation interface with evaluation metrics, side-by-side comparisons and a real-time inference testing section.' }
       ]
     },
     {
-      title: "Data Entry Intern",
-      company: "IBeForum",
-      companyUrl: "https://www.linkedin.com/company/ibeforum/",
-      location: "Remote / Bengaluru, India",
-      duration: "01/06/2022 – 31/08/2022",
-      year: "2022",
+      title: 'Mobile Developer Intern',
+      company: 'CompiTechnology',
+      companyUrl: 'https://www.linkedin.com/company/compitechnology/',
+      location: 'Sfax, Tunisia',
+      duration: 'Jul 2023  Aug 2023',
       description: [
-        "Actively engaged in data collection, using various techniques to gather information supporting organizational objectives",
-        "Leveraged Googling and web-based tools to collect pertinent data effectively"
+        { text: 'Engineered a cross-platform mobile monitoring and alerting app for a Canadian startup using Flutter and Dart.' },
+        { text: 'Translated startup objectives into high-fidelity UI/UX concepts with Figma.' },
+        { text: 'Architected a real-time Firebase backend  push notifications, live data sync and secure authentication.' }
       ]
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-
   return (
-    <ExperienceSection id="experience">
+    <Section id="experience">
       <Container>
-        <Title
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          {t('experience.title')}
-        </Title>
+        <Header>
+          <Kicker>Experience</Kicker>
+          <SectionTitle {...fadeUp}>{t('experience.title')}</SectionTitle>
+        </Header>
 
         <Timeline>
-
           {experiences.map((exp, index) => (
-            <TimelineItem
-              key={index}
-              align="left"
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
+            <TimelineRow
+              key={`${exp.company}-${exp.duration}`}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.3) }}
             >
-              <TimelineDot />
-              <Card>
-                <YearPeriodLine>
-                  <YearBadge>{exp.year}</YearBadge>
-                  <PeriodText>{exp.duration}</PeriodText>
-                </YearPeriodLine>
-                <JobTitle>{exp.title}</JobTitle>
-                <Company>
-                  <CompanyName>{exp.company}</CompanyName>
-                  {exp.companyUrl && (
-                    <CompanyLink href={exp.companyUrl} target="_blank" rel="noopener noreferrer">
-                      <FiExternalLink />
-                    </CompanyLink>
-                  )}
-                </Company>
-                <MetaInfo>
-                  <MetaItem>
-                    <FiMapPin />
-                    {exp.location}
-                  </MetaItem>
-                  {exp.current && (
-                    <MetaItem>
-                      <span style={{ color: '#10b981', fontWeight: 'bold' }}>
-                        {t('experience.current')}
-                      </span>
-                    </MetaItem>
-                  )}
-                </MetaInfo>
-                <Description>
+              <Rail>
+                <Dot />
+                {index < experiences.length - 1 && <Line />}
+              </Rail>
+              <Entry>
+                <EntryHeader>
+                  <div>
+                    <RoleTitle>{exp.title}</RoleTitle>
+                    <Company
+                      href={exp.companyUrl}
+                      target={exp.companyUrl ? '_blank' : undefined}
+                      rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
+                      as={exp.companyUrl ? 'a' : 'span'}
+                    >
+                      @ {exp.company}
+                    </Company>
+                    {exp.current && (
+                      <CurrentBadge>{t('experience.current')}</CurrentBadge>
+                    )}
+                  </div>
+                  <EntryMeta>
+                    <div>{exp.duration}</div>
+                    <div>{exp.location}</div>
+                  </EntryMeta>
+                </EntryHeader>
+                <Bullets>
                   {exp.description.map((item, i) => (
-                    <DescriptionItem key={i}>{item}</DescriptionItem>
+                    <Bullet key={i}>
+                      <span>
+                        {item.lead && <strong>{item.lead}  </strong>}
+                        {item.text}
+                      </span>
+                    </Bullet>
                   ))}
-                </Description>
-              </Card>
-            </TimelineItem>
+                </Bullets>
+              </Entry>
+            </TimelineRow>
           ))}
         </Timeline>
       </Container>
-    </ExperienceSection>
+    </Section>
   );
 };
 

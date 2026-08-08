@@ -2,113 +2,84 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiCalendar } from 'react-icons/fi';
-import { BsPeople, BsAward } from 'react-icons/bs';
+import { Users } from 'lucide-react';
+import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
-const VolunteeringSection = styled.section`
-  padding: 5rem 0;
-  background-color: ${({ theme }) => theme.colors.surface};
+const Header = styled.div`
+  margin-bottom: 2.5rem;
 `;
 
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-`;
-
-const Title = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
-`;
-
-const VolunteeringGrid = styled.div`
+const Grid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
 `;
 
-const VolunteeringCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid ${({ theme }) => theme.colors.primary};
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }
+const Card = styled(motion.div)`
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 16px;
+  padding: 1.25rem;
 `;
 
-const OrganizationHeader = styled.div`
+const OrgHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.625rem;
+  margin-bottom: 0.75rem;
 `;
 
-const IconWrapper = styled.div`
-  width: 50px;
-  height: 50px;
-  background: ${({ theme }) => theme.colors.gradient};
-  border-radius: 12px;
+const OrgIcon = styled.div`
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.5rem;
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
-const OrganizationInfo = styled.div`
-  flex: 1;
-`;
-
-const OrganizationName = styled.h3`
+const OrgName = styled.div`
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: ${({ theme }) => theme.colors.primary};
-  font-size: 1.25rem;
-  margin-bottom: 0.25rem;
+  line-height: 1.3;
 `;
 
-const OrganizationAbbr = styled.span`
+const OrgAbbr = styled.div`
+  font-size: 0.6875rem;
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.875rem;
-  font-weight: 500;
 `;
 
-const PositionsList = styled.ul`
-  list-style: none;
-  margin: 1rem 0;
+const Positions = styled.ul`
+  display: flex;
+  flex-direction: column;
+
+  li + li {
+    border-top: 1px solid ${({ theme }) => theme.colors.border};
+  }
 `;
 
 const Position = styled.li`
-  padding: 0.75rem 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  
-  &:last-child {
-    border-bottom: none;
-  }
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
 `;
 
 const PositionTitle = styled.span`
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 500;
   color: ${({ theme }) => theme.colors.text};
-  display: block;
-  margin-bottom: 0.25rem;
 `;
 
 const PositionDuration = styled.span`
-  font-size: 0.875rem;
+  flex-shrink: 0;
+  font-size: 0.6875rem;
   color: ${({ theme }) => theme.colors.textSecondary};
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  
-  svg {
-    font-size: 14px;
-  }
 `;
 
 const Volunteering: React.FC = () => {
@@ -116,140 +87,80 @@ const Volunteering: React.FC = () => {
 
   const volunteeringData = [
     {
-      organization: "Google Developer Student Club",
-      abbreviation: "GDSC FSS",
-      icon: BsAward,
+      organization: 'Google Developer Student Club',
+      abbreviation: 'GDSC FSS',
       positions: [
-        {
-          title: "Member",
-          duration: "2020 - 2025"
-        },
-        {
-          title: "Treasurer",
-          duration: "2023 - 2024"
-        }
+        { title: 'Member', duration: '2020  2025' },
+        { title: 'Treasurer', duration: '2023  2024' }
       ]
     },
     {
-      organization: "SecuriNets Club",
-      abbreviation: "SecuriNets FSS",
-      icon: BsPeople,
+      organization: 'SecuriNets Club',
+      abbreviation: 'SecuriNets FSS',
       positions: [
-        {
-          title: "Member",
-          duration: "2022 - 2023"
-        },
-        {
-          title: "Treasurer",
-          duration: "2022 - 2023"
-        }
+        { title: 'Member', duration: '2022  2023' },
+        { title: 'Treasurer', duration: '2022  2023' }
       ]
     },
     {
-      organization: "NATEG ENIS Student Chapter",
-      abbreviation: "NATEG ENIS",
-      icon: BsPeople,
-      positions: [
-        {
-          title: "EfS Manager",
-          duration: "2023 - 2024"
-        }
-      ]
+      organization: 'NATEG ENIS Student Chapter',
+      abbreviation: 'NATEG ENIS',
+      positions: [{ title: 'EfS Manager', duration: '2023  2024' }]
     },
     {
-      organization: "IEEE FSS Student Branch",
-      abbreviation: "IEEE FSS SB",
-      icon: BsPeople,
+      organization: 'IEEE FSS Student Branch',
+      abbreviation: 'IEEE FSS SB',
       positions: [
-        {
-          title: "Member",
-          duration: "2021 - 2026"
-        },
-        {
-          title: "Vice-Chair IEEE Computer Society FSS SBC",
-          duration: "2023 - 2024"
-        },
-        {
-          title: "Chair IEEE Computer Society FSS SBC",
-          duration: "2024 - 2025"
-        }
+        { title: 'Member', duration: '2021  2026' },
+        { title: 'Vice-Chair, IEEE Computer Society FSS SBC', duration: '2023  2024' },
+        { title: 'Chair, IEEE Computer Society FSS SBC', duration: '2024  2025' }
       ]
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 }
-    }
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
   return (
-    <VolunteeringSection id="volunteering">
+    <Section id="volunteering" $borderTop>
       <Container>
-        <Title
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          {t('volunteering.title')}
-        </Title>
+        <Header>
+          <Kicker>Community</Kicker>
+          <SectionTitle {...fadeUp}>{t('volunteering.title')}</SectionTitle>
+        </Header>
 
-        <VolunteeringGrid
-          as={motion.div}
-          variants={containerVariants}
+        <Grid
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {volunteeringData.map((org, index) => {
-            const IconComponent = org.icon as React.ElementType;
-            return (
-              <VolunteeringCard
-                key={index}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-              >
-                <OrganizationHeader>
-                  <IconWrapper>
-                    <IconComponent />
-                  </IconWrapper>
-                  <OrganizationInfo>
-                    <OrganizationName>{org.organization}</OrganizationName>
-                    <OrganizationAbbr>{org.abbreviation}</OrganizationAbbr>
-                  </OrganizationInfo>
-                </OrganizationHeader>
-                
-                <PositionsList>
-                  {org.positions.map((position, posIndex) => (
-                    <Position key={posIndex}>
-                      <PositionTitle>{position.title}</PositionTitle>
-                      <PositionDuration>
-                        <FiCalendar />
-                        {position.duration}
-                      </PositionDuration>
-                    </Position>
-                  ))}
-                </PositionsList>
-              </VolunteeringCard>
-            );
-          })}
-        </VolunteeringGrid>
+          {volunteeringData.map(org => (
+            <Card key={org.organization} variants={itemVariants}>
+              <OrgHeader>
+                <OrgIcon>
+                  <Users size={15} />
+                </OrgIcon>
+                <div>
+                  <OrgName>{org.organization}</OrgName>
+                  <OrgAbbr>{org.abbreviation}</OrgAbbr>
+                </div>
+              </OrgHeader>
+              <Positions>
+                {org.positions.map(position => (
+                  <Position key={position.title}>
+                    <PositionTitle>{position.title}</PositionTitle>
+                    <PositionDuration>{position.duration}</PositionDuration>
+                  </Position>
+                ))}
+              </Positions>
+            </Card>
+          ))}
+        </Grid>
       </Container>
-    </VolunteeringSection>
+    </Section>
   );
 };
 

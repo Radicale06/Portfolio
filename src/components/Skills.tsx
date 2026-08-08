@@ -2,199 +2,90 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { 
-  SiPython, SiDjango, SiFastapi, SiFlask, SiJavascript, SiReact, 
-  SiDocker, SiKubernetes, SiGit, SiLinux, SiApachespark, SiApachekafka,
-  SiRedis, SiTensorflow
-} from 'react-icons/si';
-import { FaJava, FaDatabase } from 'react-icons/fa';
-import { AiOutlineRobot, AiOutlineCode, AiOutlineEye, AiOutlineLineChart } from 'react-icons/ai';
-import { BsGearFill, BsServer, BsGraphUp } from 'react-icons/bs';
-import { DiMysql } from 'react-icons/di';
-import { MdOutlineScience } from 'react-icons/md';
+import { Section, Container, Kicker, fadeUp } from '../styles/Shared';
 
-const SkillsSection = styled.section`
-  padding: 5rem 0;
-`;
-
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-`;
-
-const Title = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: 3rem;
-`;
-
-const SkillsContainer = styled.div`
-  display: grid;
-  gap: 3rem;
-`;
-
-const SkillCategory = styled(motion.div)`
-  background-color: ${({ theme }) => theme.colors.surface};
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const CategoryTitle = styled.h3`
-  color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-`;
-
-const SkillsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1.5rem;
-`;
-
-const SkillCard = styled(motion.div)`
+const ChipRow = styled(motion.div)`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+`;
+
+const Chip = styled.div`
+  display: flex;
   align-items: center;
-  padding: 1rem;
+  gap: 0.375rem;
   background-color: ${({ theme }) => theme.colors.background};
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    background-color: ${({ theme }) => theme.colors.primary}10;
-  }
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 8px;
+  padding: 0.375rem 0.75rem;
 `;
 
-const SkillIcon = styled.div`
-  font-size: 2.5rem;
-  color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: 0.5rem;
-`;
-
-const SkillName = styled.p`
-  font-size: 0.875rem;
-  text-align: center;
+const ChipName = styled.span`
+  font-size: 0.8125rem;
+  font-weight: 500;
   color: ${({ theme }) => theme.colors.text};
 `;
 
-interface Skill {
-  name: string;
-  icon: any;
-}
+const ChipTag = styled.span`
+  font-size: 0.6875rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
 
+interface SkillChip {
+  name: string;
+  tag: string;
+}
 
 const Skills: React.FC = () => {
   const { t } = useTranslation();
 
-  const skillCategories = [
-    {
-      title: "Programming Languages & Frameworks",
-      skills: [
-        { name: 'Python', icon: SiPython },
-        { name: 'Django', icon: SiDjango },
-        { name: 'FastAPI', icon: SiFastapi },
-        { name: 'Flask', icon: SiFlask },
-        { name: 'Java', icon: FaJava },
-        { name: 'JavaScript', icon: SiJavascript },
-        { name: 'React', icon: SiReact },
-        { name: 'C', icon: AiOutlineCode },
-      ]
-    },
-    {
-      title: "AI & Machine Learning",
-      skills: [
-        
-        {name: 'Tensorflow', icon: SiTensorflow },
-        {name: 'Pytorch', icon: AiOutlineRobot },
-        { name: 'Deep Learning', icon: AiOutlineRobot },
-        { name: 'Machine Learning', icon: AiOutlineRobot },
-        { name: 'Data Science', icon: MdOutlineScience },
-        { name: 'Data Analysis', icon: AiOutlineLineChart },
-        { name: 'Data Visualization', icon: BsGraphUp },
-        { name: 'NLP', icon: AiOutlineRobot },
-        { name: 'VectorDB\'s', icon: FaDatabase },
-        { name: 'RAG', icon: AiOutlineRobot },
-        { name: 'LLM', icon: AiOutlineRobot },
-        { name: 'Computer Vision', icon: AiOutlineEye },
-        { name: 'N8N', icon: AiOutlineRobot },
-        { name: 'VLLM', icon: AiOutlineRobot },
-        { name: 'Ollama', icon: AiOutlineRobot },
-      ]
-    },
-    {
-      title: "DevOps & Infrastructure",
-      skills: [
-        { name: 'SQL', icon: DiMysql },
-        { name: 'IaC', icon: AiOutlineCode },
-        { name: 'Git', icon: SiGit },
-        { name: 'Linux', icon: SiLinux },
-        { name: 'Docker', icon: SiDocker },
-        { name: 'Kubernetes', icon: SiKubernetes },
-      ]
-    },
-    {
-      title: "Big Data & Processing",
-      skills: [
-        { name: 'Hadoop', icon: BsServer },
-        { name: 'Spark', icon: SiApachespark },
-        { name: 'Zookeeper', icon: BsGearFill },
-        { name: 'Hive', icon: FaDatabase },
-        { name: 'Kafka', icon: SiApachekafka },
-        { name: 'HBase', icon: FaDatabase },
-        { name: 'Redis', icon: SiRedis },
-        { name: 'Celery', icon: BsGearFill },
-      ]
-    }
+  const skills: SkillChip[] = [
+    { name: 'Python', tag: 'Language' },
+    { name: 'TypeScript', tag: 'Language' },
+    { name: 'SQL', tag: 'Data' },
+    { name: 'LLMs', tag: 'AI' },
+    { name: 'RAG', tag: 'Architecture' },
+    { name: 'LangChain', tag: 'Agents' },
+    { name: 'LangGraph', tag: 'Agents' },
+    { name: 'OpenAI', tag: 'API' },
+    { name: 'Hugging Face', tag: 'Models' },
+    { name: 'vLLM', tag: 'LLM Ops' },
+    { name: 'Triton Inference Server', tag: 'LLM Ops' },
+    { name: 'Ray Clusters', tag: 'Distributed' },
+    { name: 'TTS', tag: 'Speech' },
+    { name: 'STT', tag: 'Speech' },
+    { name: 'LiveKit', tag: 'Voice' },
+    { name: 'WebRTC', tag: 'Real-time' },
+    { name: 'ChromaDB', tag: 'Vector DB' },
+    { name: 'Chonkie', tag: 'RAG' },
+    { name: 'Web Scraping', tag: 'Data' },
+    { name: 'YOLO', tag: 'Vision' },
+    { name: 'AutoKeras', tag: 'AutoML' },
+    { name: 'LazyPredict', tag: 'AutoML' },
+    { name: 'FastAPI', tag: 'Backend' },
+    { name: 'Django', tag: 'Backend' },
+    { name: 'Celery', tag: 'Backend' },
+    { name: 'Supabase', tag: 'Backend' },
+    { name: 'n8n', tag: 'Automation' },
+    { name: 'Docker', tag: 'Infra' },
+    { name: 'OVHCloud', tag: 'Cloud' }
   ];
 
-
-
   return (
-    <SkillsSection id="skills">
+    <Section id="skills" $surface $borderTop $borderBottom>
       <Container>
-        <Title
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          {t('skills.title')}
-        </Title>
-
-        <SkillsContainer>
-          {skillCategories.map((category, categoryIndex) => (
-            <SkillCategory
-              key={categoryIndex}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-            >
-              <CategoryTitle>{category.title}</CategoryTitle>
-              <SkillsGrid>
-                {category.skills.map((skill, skillIndex) => {
-                  const IconComponent = skill.icon as React.ElementType;
-                  return (
-                    <SkillCard
-                      key={skillIndex}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <SkillIcon><IconComponent /></SkillIcon>
-                      <SkillName>{skill.name}</SkillName>
-                    </SkillCard>
-                  );
-                })}
-              </SkillsGrid>
-            </SkillCategory>
+        <Kicker>{t('skills.title')}</Kicker>
+        <ChipRow {...fadeUp}>
+          {skills.map(skill => (
+            <Chip key={skill.name}>
+              <ChipName>{skill.name}</ChipName>
+              <ChipTag>{skill.tag}</ChipTag>
+            </Chip>
           ))}
-        </SkillsContainer>
+        </ChipRow>
       </Container>
-    </SkillsSection>
+    </Section>
   );
 };
 

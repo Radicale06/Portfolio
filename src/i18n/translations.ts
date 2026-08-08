@@ -22,7 +22,7 @@ export const translations = {
       },
       about: {
         title: "About Me",
-        content: "I am a recent Data Engineering graduate with specialized expertise in Artificial Intelligence and distributed systems. Through hands-on experience developing multi-tenant RAG architectures, optimizing LLM deployments, and building production-ready AI platforms, I have gained deep technical proficiency in modern AI/ML technologies. I am seeking opportunities in AI Engineering, Data Engineering, or ML Infrastructure where I can leverage my skills to drive innovation and deliver impactful solutions."
+        content: "I'm an AI engineer with hands-on experience building and deploying intelligent systems  from Agentic AI solutions like real-time voice agents and automated chatbots, to scalable RAG architectures, distributed LLM deployments and machine-learning pipelines that solve real-world technical challenges."
       },
       skills: {
         title: "Skills",
@@ -100,7 +100,7 @@ export const translations = {
       },
       about: {
         title: "À Propos",
-        content: "Je suis un diplômé récent en ingénierie des données avec une expertise spécialisée en intelligence artificielle et systèmes distribués. Grâce à une expérience pratique dans le développement d'architectures RAG multi-locataires, l'optimisation des déploiements LLM et la construction de plateformes IA prêtes pour la production, j'ai acquis une compétence technique approfondie dans les technologies modernes IA/ML. Je recherche des opportunités en ingénierie IA, ingénierie des données ou infrastructure ML où je peux exploiter mes compétences pour stimuler l'innovation et fournir des solutions impactantes."
+        content: "Je suis un ingénieur en intelligence artificielle avec une expérience pratique dans la conception et le déploiement de systèmes intelligents  des solutions d'IA agentique comme les agents vocaux en temps réel et les chatbots automatisés, aux architectures RAG évolutives, aux déploiements LLM distribués et aux pipelines de machine learning qui résolvent des défis techniques concrets."
       },
       skills: {
         title: "Compétences",
@@ -178,7 +178,7 @@ export const translations = {
       },
       about: {
         title: "نبذة عني",
-        content: "أنا خريج حديث في هندسة البيانات مع خبرة متخصصة في الذكاء الاصطناعي والأنظمة الموزعة. من خلال الخبرة العملية في تطوير بنيات RAG متعددة المستأجرين، وتحسين نشر LLM، وبناء منصات الذكاء الاصطناعي الجاهزة للإنتاج، اكتسبت كفاءة تقنية عميقة في تقنيات AI/ML الحديثة. أبحث عن فرص في هندسة الذكاء الاصطناعي أو هندسة البيانات أو البنية التحتية ML حيث يمكنني الاستفادة من مهاراتي لدفع الابتكار وتقديم حلول مؤثرة."
+        content: "أنا مهندس ذكاء اصطناعي أمتلك خبرة عملية في بناء ونشر الأنظمة الذكية  من حلول الذكاء الاصطناعي الوكيلة مثل الوكلاء الصوتيين في الوقت الفعلي وروبوتات المحادثة الآلية، إلى بنيات RAG القابلة للتوسع، ونشر نماذج LLM الموزعة، وخطوط تعلم الآلة التي تحل تحديات تقنية واقعية."
       },
       skills: {
         title: "المهارات",

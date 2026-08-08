@@ -2,203 +2,121 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiCalendar } from 'react-icons/fi';
-import { BsTrophy, BsAward } from 'react-icons/bs';
-import { AiOutlineTrophy } from 'react-icons/ai';
+import { Award } from 'lucide-react';
+import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
-const HonorsSection = styled.section`
-  padding: 5rem 0;
+const Header = styled.div`
+  margin-bottom: 2.5rem;
 `;
 
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-`;
-
-const Title = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
-`;
-
-const HonorsGrid = styled.div`
+const Grid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.75rem;
 `;
 
-const HonorCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid ${({ theme }) => theme.colors.primary};
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const HonorHeader = styled.div`
+const Card = styled(motion.div)`
+  background-color: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 16px;
+  padding: 1rem;
   display: flex;
+  gap: 0.75rem;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
 `;
 
-const IconWrapper = styled.div`
-  width: 50px;
-  height: 50px;
-  background: ${({ theme }) => theme.colors.gradient};
-  border-radius: 12px;
+const IconBox = styled.div`
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.5rem;
-  flex-shrink: 0;
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
-const HonorInfo = styled.div`
-  flex: 1;
-`;
-
-const HonorTitle = styled.h3`
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
-`;
-
-const Organization = styled.div`
-  color: ${({ theme }) => theme.colors.text};
+const CardTitle = styled.div`
+  font-size: 0.8125rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  line-height: 1.35;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
-const DateRange = styled.div`
-  font-size: 0.875rem;
+const CardMeta = styled.div`
+  font-size: 0.6875rem;
   color: ${({ theme }) => theme.colors.textSecondary};
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  
-  svg {
-    font-size: 14px;
-  }
+  margin-top: 0.125rem;
 `;
 
-const Description = styled.p`
+const CardText = styled.p`
+  font-size: 0.8125rem;
+  line-height: 1.55;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
-  font-size: 0.95rem;
+  margin-top: 0.375rem;
 `;
 
 const HonorsAwards: React.FC = () => {
   const { t } = useTranslation();
 
-  const honorsData = [
+  const honors = [
     {
-      title: "Best IoT Project Award",
-      organization: "Technopole Sfax, IEEE Tunisian Section, and University of Sfax",
-      date: "2024",
-      description: "Awarded for outstanding innovation in Internet of Things technology",
-      icon: BsTrophy
+      title: '2nd Place  IDSS AI for Agriculture',
+      organization: 'Kaggle',
+      description: 'Runner-up in the IDSS competition applying AI to agriculture challenges'
     },
     {
-      title: "2nd Place - PYFAC9 Competition",
-      organization: "PYFAC and Primatec",
-      date: "2024",
-      description: "Achieved second place in AI in the Automotive Field competition",
-      icon: BsAward
+      title: '2nd Place  AI Solution Challenge',
+      organization: 'Primatec · PYFAC11',
+      description: 'Second place in the AI solution challenge led by Primatec at the PYFAC11 event'
     },
     {
-      title: "2nd Place - Local Solution Challenge",
-      organization: "Google",
-      date: "2024",
-      description: "Runner-up in Google's competition for innovative local solutions",
-      icon: AiOutlineTrophy
+      title: "6th Place  Cain's Jawbone Murder Mystery",
+      organization: 'Zindi',
+      description: 'Top-10 finish reordering the famously scrambled 100-page murder mystery with NLP'
     },
     {
-      title: "Mentor at MASTER-FASTER",
-      organization: "Data Science Competition",
-      date: "2024",
-      description: "Selected as a mentor to guide participants in a prestigious data science competition",
-      icon: BsAward
+      title: 'Top 4%  Multi-Class Classification',
+      organization: 'Kaggle',
+      description: 'Ranked in the top 4% of participants in a multi-class classification competition'
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 }
-    }
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
   return (
-    <HonorsSection id="honors">
+    <Section id="honors" $surface $borderTop>
       <Container>
-        <Title
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          {t('honors.title')}
-        </Title>
+        <Header>
+          <Kicker>Recognition</Kicker>
+          <SectionTitle {...fadeUp}>{t('honors.title')}</SectionTitle>
+        </Header>
 
-        <HonorsGrid
-          as={motion.div}
-          variants={containerVariants}
+        <Grid
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {honorsData.map((honor, index) => {
-            const IconComponent = honor.icon as React.ElementType;
-            return (
-              <HonorCard
-                key={index}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-              >
-                <HonorHeader>
-                  <IconWrapper>
-                    <IconComponent />
-                  </IconWrapper>
-                  <HonorInfo>
-                    <HonorTitle>{honor.title}</HonorTitle>
-                    <Organization>{honor.organization}</Organization>
-                    <DateRange>
-                      <FiCalendar />
-                      {honor.date}
-                    </DateRange>
-                  </HonorInfo>
-                </HonorHeader>
-                <Description>{honor.description}</Description>
-              </HonorCard>
-            );
-          })}
-        </HonorsGrid>
+          {honors.map(honor => (
+            <Card key={honor.title} variants={itemVariants}>
+              <IconBox>
+                <Award size={15} />
+              </IconBox>
+              <div>
+                <CardTitle>{honor.title}</CardTitle>
+                <CardMeta>{honor.organization}</CardMeta>
+                <CardText>{honor.description}</CardText>
+              </div>
+            </Card>
+          ))}
+        </Grid>
       </Container>
-    </HonorsSection>
+    </Section>
   );
 };
 

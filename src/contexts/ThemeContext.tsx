@@ -4,9 +4,12 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 interface Theme {
   colors: {
     primary: string;
+    primaryForeground: string;
     secondary: string;
+    secondaryForeground: string;
     background: string;
     surface: string;
+    muted: string;
     text: string;
     textSecondary: string;
     border: string;
@@ -24,50 +27,53 @@ interface Theme {
   };
 }
 
+const fonts = {
+  primary: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  secondary: "'Fira Code', 'Courier New', monospace"
+};
+
+const breakpoints = {
+  mobile: '768px',
+  tablet: '1024px',
+  desktop: '1440px'
+};
+
 const lightTheme: Theme = {
   colors: {
-    primary: '#2563eb',
-    secondary: '#7c3aed',
-    background: '#ffffff',
-    surface: '#f8fafc',
-    text: '#0f172a',
-    textSecondary: '#64748b',
-    border: '#e2e8f0',
-    accent: '#3b82f6',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    primary: '#7c5c3e',
+    primaryForeground: '#faf7f4',
+    secondary: '#e8ddd4',
+    secondaryForeground: '#7c5c3e',
+    background: '#faf7f4',
+    surface: '#f5f0ea',
+    muted: '#ede7e0',
+    text: '#1e1a17',
+    textSecondary: '#9c8878',
+    border: '#e6ddd5',
+    accent: '#b8956a',
+    gradient: 'linear-gradient(135deg, #b8956a 0%, #7c5c3e 100%)'
   },
-  fonts: {
-    primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-    secondary: "'Fira Code', 'Courier New', monospace"
-  },
-  breakpoints: {
-    mobile: '768px',
-    tablet: '1024px',
-    desktop: '1440px'
-  }
+  fonts,
+  breakpoints
 };
 
 const darkTheme: Theme = {
   colors: {
-    primary: '#60a5fa',
-    secondary: '#a78bfa',
-    background: '#0f172a',
-    surface: '#1e293b',
-    text: '#f1f5f9',
-    textSecondary: '#94a3b8',
-    border: '#334155',
-    accent: '#818cf8',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    primary: '#b8956a',
+    primaryForeground: '#1a1512',
+    secondary: '#2b231c',
+    secondaryForeground: '#d9c5ab',
+    background: '#171310',
+    surface: '#1e1915',
+    muted: '#272019',
+    text: '#f0e9e1',
+    textSecondary: '#a08d7a',
+    border: '#332b23',
+    accent: '#c9a578',
+    gradient: 'linear-gradient(135deg, #c9a578 0%, #8a6845 100%)'
   },
-  fonts: {
-    primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-    secondary: "'Fira Code', 'Courier New', monospace"
-  },
-  breakpoints: {
-    mobile: '768px',
-    tablet: '1024px',
-    desktop: '1440px'
-  }
+  fonts,
+  breakpoints
 };
 
 interface ThemeContextType {
@@ -92,7 +98,7 @@ interface ThemeProviderProps {
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('theme');
-    return (savedTheme as 'light' | 'dark') || 'dark';
+    return (savedTheme as 'light' | 'dark') || 'light';
   });
 
   useEffect(() => {

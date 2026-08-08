@@ -2,326 +2,407 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FiGithub, FiExternalLink } from 'react-icons/fi';
+import { Github, ArrowUpRight, Star } from 'lucide-react';
+import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
-const ProjectsSection = styled.section`
-  padding: 5rem 0;
-`;
-
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-`;
-
-const Title = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: 3rem;
-`;
-
-const ProjectsGrid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const ProjectCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+const Header = styled.div`
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+`;
+
+const GithubProfileLink = styled.a`
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.accent};
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
-const ProjectImage = styled.div`
-  height: 200px;
-  background: ${({ theme }) => theme.colors.gradient};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+const Grid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 `;
 
-const ProjectImg = styled.img`
+const MoreProjects = styled.div`
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.accent};
+    margin-left: 0.375rem;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.primary};
+    }
+  }
+`;
+
+const Card = styled(motion.article)`
+  background-color: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accent};
+    transform: translateY(-3px);
+  }
+`;
+
+const ImageWrap = styled.div`
+  height: 11rem;
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.muted};
+`;
+
+const CardImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.1);
+  transition: transform 0.4s ease;
+
+  ${Card}:hover & {
+    transform: scale(1.04);
   }
 `;
 
-const ProjectPlaceholder = styled.div`
+const Placeholder = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${({ theme }) => theme.colors.gradient};
-  color: white;
-  text-align: center;
-  padding: 2rem;
+  gap: 0.375rem;
+  background-color: ${({ theme }) => theme.colors.secondary};
 `;
 
-const PlaceholderIcon = styled.div`
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.8;
+const PlaceholderInitials = styled.span`
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
-const PlaceholderText = styled.p`
-  font-size: 0.875rem;
-  opacity: 0.9;
+const PlaceholderStars = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.secondaryForeground};
 `;
 
-const ProjectContent = styled.div`
-  padding: 1.5rem;
-  flex: 1;
+const CardBody = styled.div`
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-`;
-
-const ProjectTitle = styled.h3`
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-`;
-
-const ProjectDescription = styled.p`
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  gap: 0.625rem;
   flex: 1;
 `;
 
-const TechStack = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-`;
-
-const TechTag = styled.span`
-  background: ${({ theme }) => theme.colors.primary}20;
-  color: ${({ theme }) => theme.colors.primary};
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.875rem;
+const Category = styled.span`
+  font-size: 0.6875rem;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
-const ProjectLinks = styled.div`
-  display: flex;
-  gap: 1rem;
+const CardTitle = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
-const ProjectLink = styled.a`
+const CardDescription = styled.p`
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  flex: 1;
+`;
+
+const CardFooter = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: ${({ theme }) => theme.colors.primary};
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const TechChips = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+`;
+
+const TechChip = styled.span`
+  font-size: 0.6875rem;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.secondaryForeground};
+  border-radius: 4px;
+  padding: 0.125rem 0.5rem;
+`;
+
+const RepoLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  transition: color 0.3s ease;
+  color: ${({ theme }) => theme.colors.primary};
+  flex-shrink: 0;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.secondary};
-  }
-
-  svg {
-    font-size: 1.25rem;
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
+
+interface Project {
+  title: string;
+  initials: string;
+  category: string;
+  description: string;
+  tech: string[];
+  github: string;
+  image?: string;
+  stars?: number;
+}
 
 const Projects: React.FC = () => {
   const { t } = useTranslation();
 
-  const projects = [
+  const projects: Project[] = [
     {
-      title: "Sport Reservation Platform",
-      description: "Full-stack booking platform with user interface and back-office dashboard for facility management. Features WhatsApp Business integration using n8n workflow automation for direct reservations and secure SSL connectivity via ngrok.",
-      tech: ["React", "Node.js", "NestJS", "n8n", "WhatsApp API", "SSL/ngrok", "JavaScript"],
-      github: "https://github.com/Radicale06/Reservation",
-      image: "/images/projects/reservation_photo.png",
-      placeholder: "Sport Platform"
+      title: 'Substrate',
+      initials: 'SB',
+      category: 'RAG · Infrastructure',
+      description:
+        'The layer between the open web and your model  turns any URL or search query into clean, chunked, vectorized context. Self-hosted reader, web search, segmenter, embeddings, reranker and pgvector store; an open-source Jina AI alternative with no API keys.',
+      tech: ['TypeScript', 'pgvector', 'Embeddings', 'Docker'],
+      github: 'https://github.com/Radicale06/Substrate',
+      stars: 6
     },
     {
-      title: "Automated Chatbots Creation platform",
-      description: "End-to-end platform democratizing AI chatbot creation. Implemented multi-tenant RAG architecture with ChromaDB, intelligent deduplication, and support for 7+ data formats. Deployed Mistral-Small-24B and Cohere Command-R7B for multilingual interactions.",
-      tech: ["Python", "Django", "React", "ChromaDB", "vLLM", "Ollama", "Celery", "Redis", "Docker", "Mistral AI", "Cohere AI" , "Selenium Grid"],
-      github: "https://github.com/Radicale06/PFE",
-      image: "/images/projects/multitenant_rag.png",
-      placeholder: "AI RAG Platform"
+      title: 'LinkPilot',
+      initials: 'LP',
+      category: 'Automation · Growth',
+      description:
+        'Autopilot for growing your LinkedIn network  collects profiles from a search and sends paced, capped connection requests through LinkedIn\'s own internal API, with human-like delays and duplicate protection.',
+      tech: ['Node.js', 'Browser Automation', 'LinkedIn API'],
+      github: 'https://github.com/Radicale06/linkpilot',
+      stars: 3
     },
     {
-      title: "Data Analytics Project",
-      description: "Enterprise data analytics solution using Apache Kylin with OLAP capabilities. Integrated Apache Kafka for real-time data streaming and Apache Hive for data warehousing, enabling fast, complex analyses on massive datasets for valuable business intelligence insights.",
-      tech: ["Apache Kylin", "Apache Kafka", "Apache Hive", "OLAP", "Big Data", "Business Intelligence"],
-      github: "#",
-      image: "/images/projects/analytics.png",
-      placeholder: "Data Analytics"
+      title: 'WhatsApp AI Agent',
+      initials: 'WA',
+      category: 'Agents · Messaging',
+      description:
+        'Multi-tenant WhatsApp chatbot supporting multiple Business accounts  a LangGraph agent with RAG knowledge-base retrieval, message queueing with fallback, and a NestJS backend behind Meta Cloud webhooks.',
+      tech: ['FastAPI', 'LangGraph', 'RAG', 'WhatsApp API'],
+      github: 'https://github.com/Radicale06/whatsapp-agent'
     },
     {
-      title: "MLOps Pipeline",
-      description: "Complete MLOps pipeline leveraging DagsHub for data versioning, MLflow for experiment tracking, and Arize for monitoring. Implemented with pytest for reliability, FastAPI and Docker for scalable deployment, React dashboard for predictions, and GitLab CI/CD automation.",
-      tech: ["Python", "MLflow", "DagsHub", "Arize", "FastAPI", "Docker", "React", "GitLab CI/CD", "pytest"],
-      github: "https://github.com/Radicale06/MLOps",
-      image: "/images/projects/MLops.png",
-      placeholder: "MLOps Pipeline"
+      title: 'AI Voice Cloning Studio',
+      initials: 'VC',
+      category: 'Voice AI · TTS',
+      description:
+        'Full-stack voice cloning platform  create a personalized voice model and generate natural speech from any text, with async processing for 100+ concurrent users, JWT auth and real-time queue monitoring.',
+      tech: ['React', 'FastAPI', 'TTS', 'TypeScript'],
+      github: 'https://github.com/Radicale06/voice-cloning'
     },
     {
-      title: "Blockchain Document Certifier",
-      description: "Blockchain-based application to certify and verify document integrity by generating unique fingerprints stored on the blockchain. Ensures documents remain unaltered by comparing current fingerprints with the original, immediately detecting any tampering.",
-      tech: ["Blockchain", "Smart Contracts", "React", "Node.js", "Cryptography", "Web3"],
-      github: "https://github.com/Radicale06/Blockchain_Project",
-      image: "/images/projects/blockchain.png",
-      placeholder: "Blockchain App"
+      title: 'Qwen Reranker Service',
+      initials: 'QR',
+      category: 'LLM Ops · Retrieval',
+      description:
+        'Cross-encoder reranking service running Qwen3-Reranker-0.6B via llama.cpp  scores query-document relevance directly instead of embedding similarity, sharpening RAG retrieval quality.',
+      tech: ['Python', 'llama.cpp', 'Qwen', 'Reranking'],
+      github: 'https://github.com/Radicale06/Qwen-Reranker-llama-cpp'
     },
     {
-      title: "MediReport AI",
-      description: "Healthcare chatbot serving as a knowledgeable medical assistant. Utilizes fine-tuned LLaMA model for accurate responses, Flask API for backend functionality, and React interface for user-friendly support, ensuring clear and reliable healthcare communication.",
-      tech: ["Python", "LLaMA", "Flask", "React", "NLP", "Fine-tuning", "Healthcare AI"],
-      github: "",
-      image: "/images/projects/medical_report.png",
-      placeholder: "Healthcare AI"
+      title: 'BotForge',
+      initials: 'BF',
+      category: 'LLM · RAG',
+      description:
+        'End-to-end platform democratizing AI chatbot creation  multi-tenant RAG on ChromaDB with semantic chunking and vector deduplication, serving Mistral-Small-24B and Cohere Command-R7B via vLLM.',
+      tech: ['Django', 'ChromaDB', 'vLLM', 'Celery'],
+      github: 'https://github.com/Radicale06/BotForge',
+      image: '/images/projects/multitenant_rag.png'
     },
     {
-      title: "Real-time Log Analysis System",
-      description: "Real-time data stream processing system for log analysis using Spark and Kafka, managed with YARN and deployed on Linux environments via VirtualBox. Features PySpark analysis and Chart.js visualization for comprehensive log monitoring.",
-      tech: ["Apache Spark", "Kafka", "PySpark", "YARN", "Chart.js", "Linux", "VirtualBox"],
-      github: "#",
-      image: "/images/projects/analysis.png",
-      placeholder: "Log Analysis"
+      title: 'Sport Reservation Platform',
+      initials: 'SR',
+      category: 'Full-Stack · Automation',
+      description:
+        'Booking platform with user interface and back-office dashboard for facility management, plus a WhatsApp AI booking assistant built with n8n and OpenAI for direct reservations.',
+      tech: ['React', 'FastAPI', 'n8n', 'OpenAI'],
+      github: 'https://github.com/Radicale06/Reservation',
+      image: '/images/projects/reservation_photo.png'
     },
     {
-      title: "Automated Infrastructure",
-      description: "Configured automation infrastructure with Kubernetes for orchestration, Nexus for repository management, and Jenkins for CI/CD. Utilized Vagrant and VirtualBox for development environments with GitLab integration.",
-      tech: ["Kubernetes", "Jenkins", "Nexus", "Vagrant", "VirtualBox", "Linux", "GitLab", "IaC"],
-      github: "#",
-      image: "/images/projects/Automated_Infrastructure.png",
-      placeholder: "DevOps Infrastructure"
+      title: 'EduQuest (Quizify)',
+      initials: 'EQ',
+      category: 'GenAI · EdTech',
+      description:
+        'AI-powered educational gamification platform  dynamic quiz generation adapted to the learner\'s level, personalized feedback and smart hints, with XP, badges, streaks and leaderboards.',
+      tech: ['TypeScript', 'GenAI', 'Gamification'],
+      github: 'https://github.com/Radicale06/Quizify'
     },
     {
-      title: "YouTube Sentiment Classifier",
-      description: "Classified Arabic YouTube comments into positive, negative, and neutral categories. Evaluated videos for pleasantness and ranked them using web scraping, NLP, NLTK, vectorizing, and deep learning techniques.",
-      tech: ["Python", "NLP", "NLTK", "Web Scraping", "Machine Learning", "Deep Learning", "Arabic NLP"],
-      github: "https://github.com/Radicale06/Comments_Classification",
-      image: "/images/projects/sentiments.png",
-      placeholder: "NLP Sentiment Analysis"
+      title: 'Order-Trade Reconciliation',
+      initials: 'RC',
+      category: 'GenAI · Finance',
+      description:
+        'GenAI proof of concept that reconciles order and trade records automatically with OpenAI models  matching, discrepancy detection and explanation generation over financial data.',
+      tech: ['Python', 'OpenAI', 'GenAI'],
+      github: 'https://github.com/Radicale06/Data-Reconciliation-PoC'
     },
     {
-      title: "ELK Log Monitoring System",
-      description: "Deployed and configured ELK stack with Filebeat and Redis for real-time log collection. Improved troubleshooting efficiency by 40% and streamlined incident response times across the operations team.",
-      tech: ["Elasticsearch", "Logstash", "Kibana", "Filebeat", "Redis", "DevOps", "Monitoring"],
-      github: "#",
-      image: "/images/projects/elk_logs.png",
-      placeholder: "ELK Monitoring"
+      title: 'Mental Health in the Workplace',
+      initials: 'MH',
+      category: 'Data Science · ML',
+      description:
+        'CRISP-DM data-mining study on 10,000 workplace mental-health survey rows  grounded feature engineering, Cramér\'s-V selection, four classifiers and a Gradio prototype; Gradient Boosting tops out at 0.70 accuracy.',
+      tech: ['Python', 'Scikit-learn', 'Gradio', 'CRISP-DM'],
+      github: 'https://github.com/Radicale06/Mental-Health-in-the-Workplace-2020-2024-'
     },
     {
-      title: "Pneumonia Detection",
-      description: "Detected pneumonia in X-ray images using deep learning. Built CNNs from scratch and utilized pre-trained models like VGG16 and MobileNetV2 with transfer learning and freezing strategies for medical image analysis.",
-      tech: ["Python", "TensorFlow", "Keras", "CNN", "VGG16", "MobileNetV2", "Medical Imaging"],
-      github: "#",
-      image: "/images/projects/pneumia.png",
-      placeholder: "Medical AI Detection"
+      title: 'MLOps Pipeline',
+      initials: 'ML',
+      category: 'MLOps · CI/CD',
+      description:
+        'Complete MLOps pipeline with DagsHub data versioning, MLflow experiment tracking and Arize monitoring  FastAPI and Docker deployment, React dashboard, GitLab CI/CD automation.',
+      tech: ['MLflow', 'DagsHub', 'FastAPI', 'Docker'],
+      github: 'https://github.com/Radicale06/MLOps',
+      image: '/images/projects/MLops.png'
+    },
+    {
+      title: 'Arabic Sentiment Classifier',
+      initials: 'SC',
+      category: 'NLP · Deep Learning',
+      description:
+        'Classified Arabic YouTube comments into positive, negative and neutral categories, ranking videos by pleasantness using web scraping, NLTK and deep learning.',
+      tech: ['NLP', 'NLTK', 'Deep Learning', 'Arabic NLP'],
+      github: 'https://github.com/Radicale06/Comments_Classification',
+      image: '/images/projects/sentiments.png'
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 }
-    }
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
   return (
-    <ProjectsSection id="projects">
+    <Section id="projects" $borderTop>
       <Container>
-        <Title
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          {t('projects.title')}
-        </Title>
+        <Header>
+          <div>
+            <Kicker>Featured Work</Kicker>
+            <SectionTitle {...fadeUp}>{t('projects.title')}</SectionTitle>
+          </div>
+          <GithubProfileLink
+            href="https://github.com/Radicale06"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Github size={14} />
+            github.com/Radicale06
+            <ArrowUpRight size={14} />
+          </GithubProfileLink>
+        </Header>
 
-        <ProjectsGrid
-          variants={containerVariants}
+        <Grid
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
         >
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={index}
-              variants={itemVariants}
-              whileHover={{ y: -10 }}
-            >
-              <ProjectImage>
-                <ProjectImg 
-                  src={`${process.env.PUBLIC_URL}${project.image}`} 
-                  alt={project.title}
-                  onError={(e) => {
-                    // Hide image and show placeholder if image fails to load
-                    const img = e.target as HTMLImageElement;
-                    img.style.display = 'none';
-                    const placeholder = img.nextElementSibling as HTMLElement;
-                    if (placeholder) placeholder.style.display = 'flex';
-                  }}
-                />
-                <ProjectPlaceholder style={{ display: 'none' }}>
-                  <PlaceholderIcon>🖼️</PlaceholderIcon>
-                  <PlaceholderText>{project.placeholder}</PlaceholderText>
-                </ProjectPlaceholder>
-              </ProjectImage>
-              <ProjectContent>
-                <ProjectTitle>{project.title}</ProjectTitle>
-                <ProjectDescription>{project.description}</ProjectDescription>
-                <TechStack>
-                  {project.tech.map((tech, techIndex) => (
-                    <TechTag key={techIndex}>{tech}</TechTag>
-                  ))}
-                </TechStack>
-                <ProjectLinks>
-                  <ProjectLink href={project.github} target="_blank" rel="noopener noreferrer">
-                    <FiGithub />
+          {projects.map(project => (
+            <Card key={project.title} variants={itemVariants}>
+              <ImageWrap>
+                {project.image ? (
+                  <CardImg
+                    src={`${process.env.PUBLIC_URL}${project.image}`}
+                    alt={project.title}
+                    loading="lazy"
+                    onError={e => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <Placeholder aria-hidden="true">
+                    <PlaceholderInitials>{project.initials}</PlaceholderInitials>
+                    {project.stars ? (
+                      <PlaceholderStars>
+                        <Star size={11} />
+                        {project.stars} stars
+                      </PlaceholderStars>
+                    ) : null}
+                  </Placeholder>
+                )}
+              </ImageWrap>
+              <CardBody>
+                <Category>{project.category}</Category>
+                <CardTitle>{project.title}</CardTitle>
+                <CardDescription>{project.description}</CardDescription>
+                <CardFooter>
+                  <TechChips>
+                    {project.tech.map(tech => (
+                      <TechChip key={tech}>{tech}</TechChip>
+                    ))}
+                  </TechChips>
+                  <RepoLink
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${project.title} on GitHub`}
+                  >
+                    <Github size={15} />
                     {t('projects.viewGithub')}
-                  </ProjectLink>
-                </ProjectLinks>
-              </ProjectContent>
-            </ProjectCard>
+                  </RepoLink>
+                </CardFooter>
+              </CardBody>
+            </Card>
           ))}
-        </ProjectsGrid>
+        </Grid>
+
+        <MoreProjects>
+          And more projects 
+          <a
+            href="https://github.com/Radicale06?tab=repositories"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            check my GitHub
+            <ArrowUpRight size={14} />
+          </a>
+        </MoreProjects>
       </Container>
-    </ProjectsSection>
+    </Section>
   );
 };
 

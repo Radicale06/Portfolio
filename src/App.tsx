@@ -3,33 +3,31 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { GlobalStyles } from './styles/GlobalStyles';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
-import About from './components/About';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
+import About from './components/About';
 import Education from './components/Education';
-import Volunteering from './components/Volunteering';
 import HonorsAwards from './components/HonorsAwards';
+import Volunteering from './components/Volunteering';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-// import BackgroundElements from './components/BackgroundElements';
 import './i18n';
 
 function App() {
   return (
     <ThemeProvider>
       <GlobalStyles />
-      {/* <BackgroundElements /> */}
       <Navigation />
       <main>
         <Hero />
-        <About />
         <Skills />
         <Experience />
         <Projects />
+        <About />
         <Education />
-        <Volunteering />
         <HonorsAwards />
+        <Volunteering />
         <Contact />
       </main>
       <Footer />
