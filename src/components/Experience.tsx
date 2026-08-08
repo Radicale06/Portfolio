@@ -205,7 +205,8 @@ const revealVariants: Variants = {
   hidden: (rtl: boolean) => ({
     opacity: 0,
     x: rtl ? 32 : -32,
-    filter: 'blur(6px)'
+    filter: 'blur(6px)',
+    transition: { duration: 0.3, ease: 'easeIn' }
   }),
   visible: {
     opacity: 1,
@@ -243,14 +244,15 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
   const [revealed, setRevealed] = useState(false);
 
   const checkProgress = (value: number) => {
-    if (revealed) return;
     const timeline = timelineRef.current;
     const row = rowRef.current;
     if (!timeline || !row) return;
     const tip = value * timeline.offsetHeight;
-    if (tip >= row.offsetTop + 12) {
-      setRevealed(true);
-    }
+    setRevealed(prev => {
+      if (!prev && tip >= row.offsetTop + 14) return true;
+      if (prev && tip < row.offsetTop + 2) return false;
+      return prev;
+    });
   };
 
   useMotionValueEvent(progress, 'change', checkProgress);
