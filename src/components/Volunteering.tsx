@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Users } from 'lucide-react';
 import { Section, Container, Kicker, SectionTitle, fadeUp } from '../styles/Shared';
 
 const Header = styled.div`
@@ -31,14 +30,22 @@ const OrgHeader = styled.div`
 
 const OrgIcon = styled.div`
   flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  background-color: ${({ theme }) => theme.colors.secondary};
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: #ffffff;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.accent};
+  padding: 0.2rem;
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 `;
 
 const OrgName = styled.div`
@@ -89,6 +96,7 @@ const Volunteering: React.FC = () => {
     {
       organization: 'Google Developer Student Club',
       abbreviation: 'GDSC FSS',
+      logo: '/images/logos/gdsc.png',
       positions: [
         { title: 'Member', duration: '2020  2025' },
         { title: 'Treasurer', duration: '2023  2024' }
@@ -97,6 +105,7 @@ const Volunteering: React.FC = () => {
     {
       organization: 'SecuriNets Club',
       abbreviation: 'SecuriNets FSS',
+      logo: '/images/logos/securinets.jpg',
       positions: [
         { title: 'Member', duration: '2022  2023' },
         { title: 'Treasurer', duration: '2022  2023' }
@@ -105,11 +114,13 @@ const Volunteering: React.FC = () => {
     {
       organization: 'NATEG ENIS Student Chapter',
       abbreviation: 'NATEG ENIS',
+      logo: '/images/logos/nateg-enis.jpg',
       positions: [{ title: 'EfS Manager', duration: '2023  2024' }]
     },
     {
       organization: 'IEEE FSS Student Branch',
       abbreviation: 'IEEE FSS SB',
+      logo: '/images/logos/ieee-fss.png',
       positions: [
         { title: 'Member', duration: '2021  2026' },
         { title: 'Vice-Chair, IEEE Computer Society FSS SBC', duration: '2023  2024' },
@@ -141,7 +152,11 @@ const Volunteering: React.FC = () => {
             <Card key={org.organization} variants={itemVariants}>
               <OrgHeader>
                 <OrgIcon>
-                  <Users size={15} />
+                  <img
+                    src={`${process.env.PUBLIC_URL}${org.logo}`}
+                    alt={`${org.abbreviation} logo`}
+                    loading="lazy"
+                  />
                 </OrgIcon>
                 <div>
                   <OrgName>{org.organization}</OrgName>

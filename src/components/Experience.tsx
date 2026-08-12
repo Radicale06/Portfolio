@@ -106,7 +106,33 @@ const EntryHeader = styled(motion.div)`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.5rem;
+  }
+`;
+
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+const LogoBox = styled.div<{ $dark?: boolean }>`
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ $dark }) => ($dark ? '#16120f' : '#ffffff')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 `;
 
@@ -223,6 +249,8 @@ interface ExperienceItem {
   location: string;
   duration: string;
   current?: boolean;
+  logo?: string;
+  logoDark?: boolean;
   description: { lead?: string; text: string }[];
 }
 
@@ -275,18 +303,29 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
         transition={{ type: 'spring', stiffness: 260, damping: 18 }}
       />
       <EntryHeader variants={revealVariants} custom={rtl}>
-        <div>
-          <RoleTitle>{exp.title}</RoleTitle>
-          <Company
-            href={exp.companyUrl}
-            target={exp.companyUrl ? '_blank' : undefined}
-            rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
-            as={exp.companyUrl ? 'a' : 'span'}
-          >
-            @ {exp.company}
-          </Company>
-          {exp.current && <CurrentBadge>{t('experience.current')}</CurrentBadge>}
-        </div>
+        <HeaderLeft>
+          {exp.logo && (
+            <LogoBox $dark={exp.logoDark}>
+              <img
+                src={`${process.env.PUBLIC_URL}${exp.logo}`}
+                alt={`${exp.company} logo`}
+                loading="lazy"
+              />
+            </LogoBox>
+          )}
+          <div>
+            <RoleTitle>{exp.title}</RoleTitle>
+            <Company
+              href={exp.companyUrl}
+              target={exp.companyUrl ? '_blank' : undefined}
+              rel={exp.companyUrl ? 'noopener noreferrer' : undefined}
+              as={exp.companyUrl ? 'a' : 'span'}
+            >
+              @ {exp.company}
+            </Company>
+            {exp.current && <CurrentBadge>{t('experience.current')}</CurrentBadge>}
+          </div>
+        </HeaderLeft>
         <EntryMeta>
           <div>{exp.duration}</div>
           <div>{exp.location}</div>
@@ -328,6 +367,8 @@ const Experience: React.FC = () => {
       location: 'Full-time · Remote',
       duration: 'Dec 2025  Present',
       current: true,
+      logo: '/images/logos/quicky-prime.png',
+      logoDark: true,
       description: [
         {
           text: 'Lead AI engineer across three SaaS products:'
@@ -352,6 +393,7 @@ const Experience: React.FC = () => {
       companyUrl: 'https://www.linkedin.com/company/access-inter/posts/?feedView=all',
       location: 'Freelance · Remote',
       duration: 'Jun 2025  Jul 2025',
+      logo: '/images/logos/access-international.jpg',
       description: [
         { text: 'Engineered a sport reservation platform using React and FastAPI.' },
         { text: 'Architected an intelligent WhatsApp AI booking assistant using n8n and OpenAI.' }
@@ -363,6 +405,7 @@ const Experience: React.FC = () => {
       companyUrl: 'https://favizone.com',
       location: 'Freelance · Remote',
       duration: 'Apr 2025  May 2025',
+      logo: '/images/logos/favizone.jpg',
       description: [
         { text: 'Led deployment and optimization of LLMs (Mistral-8x7B, Llama-70B) with vLLM  GPU memory management and tensor parallelism for high-throughput inference.' },
         { text: 'Architected Ray clusters on OVHCloud for distributed inference and horizontal scaling across multi-node architectures.' },
@@ -376,6 +419,7 @@ const Experience: React.FC = () => {
       companyUrl: 'https://www.linkedin.com/company/access-inter/posts/?feedView=all',
       location: 'Tunis, Tunisia',
       duration: 'Feb 2025  Jul 2025',
+      logo: '/images/logos/access-international.jpg',
       description: [
         { text: 'Architected an AI platform that democratizes chatbot creation, letting non-technical users deploy production-ready conversational agents.' },
         { text: 'Engineered an isolated RAG architecture on ChromaDB  semantic chunking for documents, row-based chunking for tabular data, intelligent vector deduplication.' },
@@ -389,6 +433,7 @@ const Experience: React.FC = () => {
       company: 'Yuma Tunisia',
       location: 'Sfax, Tunisia',
       duration: 'Jul 2024  Aug 2024',
+      logo: '/images/logos/yuma-tunisia.jpg',
       description: [
         { text: 'Engineered a full-stack ML Model Generator tool with FastAPI and React  automated model recommendations, dataset uploads and training pipelines.' },
         { text: 'Integrated LazyPredict with automated hyperparameter optimization to evaluate, fine-tune and recommend the best-fitting ML algorithms per dataset.' },
@@ -402,6 +447,7 @@ const Experience: React.FC = () => {
       companyUrl: 'https://www.linkedin.com/company/compitechnology/',
       location: 'Sfax, Tunisia',
       duration: 'Jul 2023  Aug 2023',
+      logo: '/images/logos/compitechnology.png',
       description: [
         { text: 'Engineered a cross-platform mobile monitoring and alerting app for a Canadian startup using Flutter and Dart.' },
         { text: 'Translated startup objectives into high-fidelity UI/UX concepts with Figma.' },
